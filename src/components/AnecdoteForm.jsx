@@ -1,7 +1,13 @@
 import { useMutation, useQueryClient  } from '@tanstack/react-query'
-import { createAnecdote } from '../requests'
+import { useContext } from 'react'
+import PropTypes from 'prop-types';
 
-const AnecdoteForm = () => {
+import { createAnecdote } from '../requests'
+import NotificationContext from '../NotificationContext'
+
+const AnecdoteForm = ({ type }) => {
+  const [message, messageDispatch] = useContext(NotificationContext)
+
   const queryClient = useQueryClient()
   const newAnecdoteMutation = useMutation({ 
     mutationFn: createAnecdote,
@@ -10,18 +16,21 @@ const AnecdoteForm = () => {
     }
   })
 
-
   const onCreate = async (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     if(content.length > 5) {
       event.target.anecdote.value = ''
       newAnecdoteMutation.mutate({ content, votes: 0 })
-      console.log('new anecdote')
+      messageDispatch({ type })
+      setTimeout(() => {
+        messageDispatch({ type: "CLEAR_MESSAGE" });
+     }, 5000);
+      console.log('New anecdote')
     } else {
       console.error('Error 400: content too short')
     }
-}
+  }
 
   return (
     <div>
@@ -34,4 +43,8 @@ const AnecdoteForm = () => {
   )
 }
 
+AnecdoteForm.propTypes = {
+ type: PropTypes.string.isRequired,
+
+}
 export default AnecdoteForm
