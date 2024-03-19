@@ -28,6 +28,10 @@ const AnecdoteForm = ({ type }) => {
      }, 5000);
       console.log('New anecdote')
     } else {
+      messageDispatch({ type: "ERROR_LENGTH" })
+      setTimeout(() => {
+        messageDispatch({ type: "CLEAR_MESSAGE" });
+     }, 5000);
       console.error('Error 400: content too short')
     }
   }

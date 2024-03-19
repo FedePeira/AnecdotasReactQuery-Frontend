@@ -13,8 +13,10 @@ const notificationReducer = (state, action) => {
       return 'You have created a new anecdote!!!'
     case "VOTE_ANECDOTE":
       return 'You have voted!!!'
+    case "ERROR_LENGTH":
+      return 'too short anecdote, must have length 5 or move'
     case "CLEAR_MESSAGE":
-      return '';
+      return ''
     default:
       return state
   }
